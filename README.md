@@ -43,27 +43,34 @@ EcoTrack est un projet académique de groupe développé dans le cadre de notre 
 Le projet suit l'architecture **MVVM avec Clean Architecture** :
 
 ```
-com.ecotrack.app/
-├── data/                    # Couche de persistance
-│   ├── local/               # Room (Entity, DAO, AppDatabase)
-│   ├── repository/          # Implémentation des repositories
-│   └── mapper/              # Conversion Entity ↔ Model
-├── domain/                  # Logique métier pure
-│   ├── model/               # Modèles de données (POJO Kotlin)
-│   ├── repository/          # Interfaces (contrats)
-│   └── usecase/             # Cas d'utilisation
-├── ui/                      # Couche de présentation
-│   ├── screens/
-│   │   ├── home/            # HomeScreen + HomeViewModel
-│   │   ├── add/             # AddTransactionScreen + AddViewModel
-│   │   └── stats/           # StatsScreen + StatsViewModel
-│   ├── components/          # Composants réutilisables
-│   └── theme/               # Color, Type, Theme (Material 3)
-├── di/                      # Injection de dépendances (Hilt)
-└── util/                    # Classes utilitaires
-```
-
----
+com.wamm.ecotrack/
+├── data/                         # Couche de données (Accès aux données & Logique externe)
+│   ├── local/                    # Persistance locale avec Room
+│   │   ├── AppDatabase.kt        # Point d'entrée de la base de données SQLite
+│   │   ├── TransactionDao.kt     # Requêtes SQL (Insert, Delete, Query)
+│   │   └── TransactionEntity.kt  # Schéma de la table en base de données
+│   ├── mapper/                   # Transformation de données
+│   │   └── TransactionMapper.kt  # Convertit les Entities (Data) en Models (Domain)
+│   └── repository/               # Implémentation des sources de données
+│       └── TransactionRepositoryImpl.kt
+├── di/                           # Injection de dépendances (Dependency Injection)
+│   └── AppModule.kt              # Configuration Hilt (fournit Database, DAO, Repositories)
+├── domain/                       # Couche métier (Indépendante des frameworks)
+│   ├── model/                    # Objets métier purs
+│   │   └── Transaction.kt        # Classe de données utilisée par l'UI
+│   ├── repository/               # Contrats de données
+│   │   └── TransactionRepository.kt # Interface définissant les méthodes disponibles
+│   └── usecase/                  # Actions spécifiques de l'utilisateur
+│       └── AddTransactionUseCase.kt # Logique isolée pour l'ajout d'une transaction
+├── ui/                           # Couche de présentation (Jetpack Compose)
+│   ├── components/               # Widgets UI réutilisables (Boutons, Cartes, etc.)
+│   ├── navigation/               # Gestion des routes et de la navigation entre écrans
+│   ├── screens/                  # Écrans complets de l'application
+│   │   ├── add/                  # Écran d'ajout (View + ViewModel)
+│   │   ├── home/                 # Écran d'accueil/Dashboard (View + ViewModel)
+│   │   └── stats/                # Écran de graphiques (View + ViewModel)
+│   └── theme/                    # Design System (Couleurs, Typographies, Thème M3)
+└── MainActivity.kt               # Activité principale, point d'entrée de l'UI
 
 ## 🚀 Installation & Lancement
 
